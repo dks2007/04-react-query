@@ -1,5 +1,12 @@
 import axios from 'axios';
-import type { MovieSearchResponse } from '../types/movie';
+import type { Movie } from '../types/movie';
+
+export interface MovieSearchResponse {
+  results: Movie[];
+  total_results: number;
+  total_pages: number;
+  page: number;
+}
 
 interface TMDBRequestParams {
   include_adult: boolean;

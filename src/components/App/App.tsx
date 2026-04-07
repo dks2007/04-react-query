@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import ReactPaginate from 'react-paginate';
-import type { Movie, MovieSearchResponse } from '../../types/movie';
+import type { Movie } from '../../types/movie';
+import type { MovieSearchResponse } from '../../services/movieService';
 import { fetchMovies } from '../../services/movieService';
 import SearchBar from '../SearchBar/SearchBar';
 import MovieGrid from '../MovieGrid/MovieGrid';
@@ -47,7 +48,8 @@ export default function App() {
   return (
     <div className={styles.app}>
       <SearchBar onSubmit={handleSearch} />
-            {!isLoading && !isError && totalPages > 1 && (
+      <main className={styles.main}>
+              {!isLoading && !isError && totalPages > 1 && (
         <ReactPaginate
           pageCount={totalPages}
           pageRangeDisplayed={5}
@@ -60,7 +62,6 @@ export default function App() {
           previousLabel="←"
         />
       )}
-      <main className={styles.main}>
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         {!isLoading && !isError && movies.length > 0 && (
