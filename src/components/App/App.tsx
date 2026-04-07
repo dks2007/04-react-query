@@ -22,6 +22,12 @@ export default function App() {
     queryFn: () => fetchMovies(query, page),
     enabled: query.length > 0,
     staleTime: 1000 * 60 * 5,
+    placeholderData: {
+      results: [],
+      total_results: 0,
+      total_pages: 0,
+      page: 1,
+    },
   });
 
   const handleSearch = (searchTerm: string) => {
