@@ -1,12 +1,5 @@
 import axios from 'axios';
-import type { Movie } from '../types/movie';
-
-interface TMDBResponse {
-  results: Movie[];
-  total_results: number;
-  total_pages: number;
-  page: number;
-}
+import type { MovieSearchResponse } from '../types/movie';
 
 interface TMDBRequestParams {
   include_adult: boolean;
@@ -20,7 +13,10 @@ interface TMDBRequestConfig {
   headers: Record<string, string>;
 }
 
-export async function fetchMovies(query: string): Promise<Movie[]> {
+export async function fetchMovies(
+  query: string,
+  page = 1,
+): Promise<MovieSearchResponse> {
   const tmdbAccessToken = import.meta.env.VITE_TMDB_TOKEN_API_KEY;
 
   if (!tmdbAccessToken) {
@@ -31,7 +27,7 @@ export async function fetchMovies(query: string): Promise<Movie[]> {
     params: {
       include_adult: false,
       language: 'en-US',
-      page: 1,
+      page,
       query,
     },
     headers: {
@@ -40,14 +36,10 @@ export async function fetchMovies(query: string): Promise<Movie[]> {
     },
   };
 
-  try {
-    const response = await axios.get<TMDBResponse>('https://api.themoviedb.org/3/search/movie', requestConfig);
+  const response = await axios.get<MovieSearchResponse>(
+    'https://api.themoviedb.org/3/search/movie',
+    requestConfig,
+  );
 
-    console.log('[movieService] TMDB response:', response.data);
-
-    return response.data.results;
-  } catch (error) {
-    console.error('[movieService] TMDB error:', error);
-    throw error;
-  }
+  return response.data;
 }
